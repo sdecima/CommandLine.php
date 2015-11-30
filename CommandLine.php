@@ -82,7 +82,7 @@ class CommandLine
                     $key                = substr($arg, 2);
 
                     // --foo value
-                    if ($i + 1 < $j && $argv[$i + 1][0] !== '-')
+                    if ($i + 1 < $j && (strlen($argv[$i + 1]) == 0 || $argv[$i + 1][0] !== '-'))
                     {
                         $value          = $argv[$i + 1];
                         $i++;
@@ -98,7 +98,7 @@ class CommandLine
                 else
                 {
                     $key                = substr($arg, 2, $eqPos - 2);
-                    $value              = substr($arg, $eqPos + 1);
+                    $value              = (strlen($arg) == $eqPos + 1) ? '' : substr($arg, $eqPos + 1);
                     $out[$key]          = $value;
                 }
             }
@@ -110,7 +110,7 @@ class CommandLine
                 if (substr($arg, 2, 1) === '=')
                 {
                     $key                = substr($arg, 1, 1);
-                    $value              = substr($arg, 3);
+                    $value              = (strlen($arg) == 3) ? '' : substr($arg, 3);
                     $out[$key]          = $value;
                 }
                 // -abc
@@ -124,7 +124,7 @@ class CommandLine
                         $out[$key]      = $value;
                     }
                     // -a value1 -abc value2
-                    if ($i + 1 < $j && $argv[$i + 1][0] !== '-')
+                    if ($i + 1 < $j && (strlen($argv[$i + 1]) == 0 || $argv[$i + 1][0] !== '-'))
                     {
                         $out[$key]      = $argv[$i + 1];
                         $i++;

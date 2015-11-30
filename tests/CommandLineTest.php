@@ -56,6 +56,14 @@ class ParserTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function singleSwitchWithEmptyValue()
+    {
+        $result = CommandLine::parseArgs(array(self::FILE, '-a='));
+        $this->assertEquals(1, count($result));
+        $this->assertSame('', $result['a']);
+    }
+
+    /** @test */
     public function multiSwitch()
     {
         $result = CommandLine::parseArgs(array(self::FILE, '-a', '-b'));
@@ -87,6 +95,14 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $result = CommandLine::parseArgs(array(self::FILE, '--a=b'));
         $this->assertEquals(1, count($result));
         $this->assertEquals('b', $result['a']);
+    }
+
+    /** @test */
+    public function singleFlagWithEmptyValue()
+    {
+        $result = CommandLine::parseArgs(array(self::FILE, '--a='));
+        $this->assertEquals(1, count($result));
+        $this->assertSame('', $result['a']);
     }
 
     /** @test */
@@ -146,12 +162,29 @@ class ParserTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function singleFlagWithEmptyValueWithoutEquation ()
+    {
+        $result = CommandLine::parseArgs(array(self::FILE, '--a', ''));
+        $this->assertEquals(1, count($result));
+        $this->assertSame('', $result['a']);
+    }
+
+    /** @test */
     public function multiSwitchAsOneWithValue()
     {
         $result = CommandLine::parseArgs(array(self::FILE, '-ab', 'value'));
         $this->assertEquals(2, count($result));
         $this->assertTrue($result['a']);
         $this->assertEquals('value', $result['b']);
+    }
+
+    /** @test */
+    public function multiSwitchAsOneWithEmptyValue()
+    {
+        $result = CommandLine::parseArgs(array(self::FILE, '-ab', ''));
+        $this->assertEquals(2, count($result));
+        $this->assertTrue($result['a']);
+        $this->assertSame('', $result['b']);
     }
 
     /** @test */
